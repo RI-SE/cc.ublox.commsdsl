@@ -4,7 +4,8 @@
 #include <cassert>
 
 #include "cc_ublox/message/CfgPrtUsb.h"
-#include "cc_ublox/message/NavPosllhPoll.h"
+#include "cc_ublox/message/NavPvtPoll.h"
+#include "cc_ublox/message/NavAttPoll.h"
 #include "comms/units.h"
 #include "comms/process.h"
 
@@ -45,11 +46,27 @@ bool Session::start()
     return true;
 }
 
-void Session::handle(InNavPosllh& msg)
+void Session::handle(InNavPvt& msg)
 {
     std::cout << "POS: lat=" << comms::units::getDegrees<double>(msg.field_lat()) <<
         "; lon=" << comms::units::getDegrees<double>(msg.field_lon()) <<
-        "; alt=" << comms::units::getMeters<double>(msg.field_height()) << std::endl;
+        "; alt=" << comms::units::getMeters<double>(msg.field_height()) << 
+        "; velN=" << comms::units::getKilometersPerHour<double>(msg.field_velN()) <<
+        "; velE=" << comms::units::getKilometersPerHour<double>(msg.field_velE()) <<
+        "; velD=" << comms::units::getKilometersPerHour<double>(msg.field_velD()) <<
+        "; groundSpeed=" << comms::units::getKilometersPerHour<double>(msg.field_gSpeed()) <<
+         std::endl;
+}
+
+void Session::handle(InNavAtt& msg)
+{
+    std::cout << "ATT: roll=" << comms::units::getDegrees<double>(msg.field_roll()) <<
+        "; pitch=" << comms::units::getDegrees<double>(msg.field_pitch()) <<
+        "; yaw=" << comms::units::getDegrees<double>(msg.field_heading()) << 
+        "; rollAccuracy=" << comms::units::getDegrees<double>(msg.field_accRoll()) <<
+        "; pitchAccuracy=" << comms::units::getDegrees<double>(msg.field_accPitch()) <<
+        "; yawAccuracy=" << comms::units::getDegrees<double>(msg.field_accHeading()) <<
+        std::endl;
 }
 
 void Session::handle(InMessage& msg)
@@ -91,10 +108,12 @@ void Session::processInputData()
 
 void Session::sendPosPoll()
 {
-    using OutNavPosllhPoll = cc_ublox::message::NavPosllhPoll<OutMessage>;
-    sendMessage(OutNavPosllhPoll());
+    using OutNavAttPoll = cc_ublox::message::NavAttPoll<OutMessage>;
+    sendMessage(OutNavAttPoll());
+    using OutNavPvtPoll = cc_ublox::message::NavPvtPoll<OutMessage>;
+    sendMessage(OutNavPvtPoll());
 
-    m_pollTimer.expires_from_now(boost::posix_time::seconds(1));
+    m_pollTimer.expires_from_now(boost::posix_time::millisec(10));
     m_pollTimer.async_wait(
         [this](const boost::system::error_code& ec) {
             if (ec == boost::asio::error::operation_aborted) {

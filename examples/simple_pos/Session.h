@@ -9,7 +9,8 @@
 #include "common/boost_wrap.h"
 
 #include "cc_ublox/Message.h"
-#include "cc_ublox/message/NavPosllh.h"
+#include "cc_ublox/message/NavPvt.h"
+#include "cc_ublox/message/NavAtt.h"
 #include "cc_ublox/frame/UbloxFrame.h"
 
 namespace cc_ublox
@@ -34,7 +35,8 @@ class Session
             comms::option::LengthInfoInterface
         >;
 
-    using InNavPosllh = cc_ublox::message::NavPosllh<InMessage>;
+    using InNavPvt = cc_ublox::message::NavPvt<InMessage>;
+    using InNavAtt = cc_ublox::message::NavAtt<InMessage>;
 
 public:
     Session(common::boost_wrap::io& io, const std::string& dev);
@@ -42,7 +44,8 @@ public:
 
     bool start();
 
-    void handle(InNavPosllh& msg);
+    void handle(InNavAtt& msg);
+    void handle(InNavPvt& msg);
 
     void handle(InMessage& msg);
 
@@ -50,7 +53,8 @@ private:
 
     using AllInMessages =
         std::tuple<
-            InNavPosllh
+            InNavAtt,
+            InNavPvt
         >;
 
     using Frame = cc_ublox::frame::UbloxFrame<InMessage, AllInMessages>;
