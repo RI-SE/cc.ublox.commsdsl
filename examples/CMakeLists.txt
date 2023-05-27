@@ -1,11 +1,19 @@
+cmake_minimum_required(VERSION 3.16)
 
 include(GNUInstallDirs)
+include(FetchContent)
 
 set (CMAKE_CXX_STANDARD 14)
 
 list (APPEND CMAKE_PREFIX_PATH "${COMMS_INSTALL_DIR}")
 
-find_package(LibComms NO_MODULE REQUIRED)
+#find_package(LibComms NO_MODULE REQUIRED)
+FetchContent_Declare(LibComms
+GIT_REPOSITORY     https://github.com/commschamp/comms.git
+GIT_TAG            v5.2
+)
+FetchContent_MakeAvailable(LibComms)
+
 
 find_package(Boost)
 
