@@ -61,7 +61,7 @@ set (UBLOX_MIN_COMMSDSL_VERSION "6.1")
 set (EXTERNALS_DIR "${PROJECT_SOURCE_DIR}/externals")
 
 if ("${UBLOX_PROT_OUTPUT_DIR}" STREQUAL "")
-    set (UBLOX_PROT_OUTPUT_DIR "${CMAKE_BINARY_DIR}/output")
+    set (UBLOX_PROT_OUTPUT_DIR "${CMAKE_BINARY_DIR}/output" PARENT_SCOPE)
 endif ()
 
 if ("${UBLOX_TEST_OUTPUT_DIR}" STREQUAL "")
@@ -601,4 +601,5 @@ if (NOT UBLOX_BUILD_EXAMPLES)
     return()
 endif()
 
-add_subdirectory (examples)
+set(COMMS_INSTALL_DIR ${COMMS_INSTALL_DIR} PARENT_SCOPE)
+# add_subdirectory (examples)
