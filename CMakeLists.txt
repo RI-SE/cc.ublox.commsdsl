@@ -6,26 +6,7 @@ if(NOT EXISTS ${BUILD_DIR})
     file(MAKE_DIRECTORY ${BUILD_DIR})
 endif()
 
-# Set the variables
-set(ENV{BUILD_DIR} ${BUILD_DIR})
-set(COMMON_INSTALL_DIR ${BUILD_DIR}/install)
-set(ENV{COMMON_INSTALL_DIR} ${COMMON_INSTALL_DIR})
-set(COMMON_BUILD_TYPE Release)
-set(ENV{COMMON_BUILD_TYPE} ${COMMON_BUILD_TYPE})
-
-# Set environment variables for the next process.
-set(ENV{CC} ${CMAKE_C_COMPILER})
-set(ENV{CXX} ${CMAKE_CXX_COMPILER})
-
-set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_INSTALL_PREFIX ${BUILD_DIR}/install)
-set(CMAKE_PREFIX_PATH ${BUILD_DIR}/install)
-
-execute_process(
-    COMMAND script/prepare_externals.sh
-    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-)
-
+option (PREPARE_EXTERNALS "Prepare external dependencies" OFF)
 option (UBLOX_NO_WARN_AS_ERR "Don't treat compilation warnings as errors." OFF)
 option (UBLOX_USE_CCACHE "Use ccache on UNIX." ON)
 option (UBLOX_GEN_PROTOCOL "Use commsdsl2comms to generate protocol definition" ON)
@@ -59,6 +40,28 @@ set (UBLOX_VERSION "2.3")
 set (UBLOX_MIN_COMMSDSL_VERSION "6.1")
 
 set (EXTERNALS_DIR "${PROJECT_SOURCE_DIR}/externals")
+
+if(PREPARE_EXTERNALS)
+    # Set the variables for prepare externals script.
+    set(ENV{BUILD_DIR} ${BUILD_DIR})
+    set(COMMON_INSTALL_DIR ${BUILD_DIR}/install)
+    set(ENV{COMMON_INSTALL_DIR} ${COMMON_INSTALL_DIR})
+    set(COMMON_BUILD_TYPE Release)
+    set(ENV{COMMON_BUILD_TYPE} ${COMMON_BUILD_TYPE})
+
+    # Set environment variables
+    set(ENV{CC} ${CMAKE_C_COMPILER})
+    set(ENV{CXX} ${CMAKE_CXX_COMPILER})
+
+    set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_INSTALL_PREFIX ${BUILD_DIR}/install)
+    set(CMAKE_PREFIX_PATH ${BUILD_DIR}/install)
+
+    execute_process(
+        COMMAND script/prepare_externals.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+    )
+endif()
 
 if ("${UBLOX_PROT_OUTPUT_DIR}" STREQUAL "")
     set (UBLOX_PROT_OUTPUT_DIR "${CMAKE_BINARY_DIR}/output" PARENT_SCOPE)

@@ -65,7 +65,8 @@ linkage with static Boost libraries.
 ```
 $> cd /source/of/this/project
 $> mkdir build && cd build
-$> BUILD_DIR=$PWD CC=gcc CXX=g++ COMMON_INSTALL_DIR=$PWD/install COMMON_BUILD_TYPE=Release ../script/prepare_externals.sh
+$> BUILD_DIR=$PWD CC=gcc CXX=g++ COMMON_INSTALL_DIR=$PWD/install COMMON_BUILD_TYPE=Release ../script/prepare_externals.sh 
+$> # You can also supply the flag -DPREPARE_EXTERNALS=ON in the next cmake command intead of running the previous command
 $> cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$PWD/install
 $> make install
 ```
