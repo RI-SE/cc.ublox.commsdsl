@@ -6,7 +6,7 @@ if(NOT EXISTS ${BUILD_DIR})
     file(MAKE_DIRECTORY ${BUILD_DIR})
 endif()
 
-option (PREPARE_EXTERNALS "Prepare external dependencies" ON)
+option (PREPARE_EXTERNALS_WO_QT "Prepare external dependencies without QT" ON)
 option (UBLOX_NO_WARN_AS_ERR "Don't treat compilation warnings as errors." OFF)
 option (UBLOX_USE_CCACHE "Use ccache on UNIX." ON)
 option (UBLOX_GEN_PROTOCOL "Use commsdsl2comms to generate protocol definition" ON)
