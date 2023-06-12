@@ -283,7 +283,7 @@ if (UBLOX_GEN_PROTOCOL)
     find_program(COMMSDSL2COMMS commsdsl2comms PATH_SUFFIXES bin REQUIRED)        
     execute_process(COMMAND "${COMMSDSL2COMMS}" --version OUTPUT_VARIABLE commsdsl2comms_version)
     if ("${commsdsl2comms_version}" VERSION_LESS "${UBLOX_MIN_COMMSDSL_VERSION}")
-        message (FATAL_ERROR "Version v${commsdsl2comms_version} of commsdsl2comms is too old, required minimum is v${UBLOX_MIN_COMMSDSL_VERSION}.")
+        message (STATUS "Version v${commsdsl2comms_version} of commsdsl2comms is too old, required minimum is v${UBLOX_MIN_COMMSDSL_VERSION}.")
     endif ()
 
     set (prot_tmp_dir "${CMAKE_BINARY_DIR}/output.tmp")
