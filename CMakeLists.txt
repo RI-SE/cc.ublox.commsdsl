@@ -41,13 +41,15 @@ set (UBLOX_MIN_COMMSDSL_VERSION "6.1")
 
 set (EXTERNALS_DIR "${PROJECT_SOURCE_DIR}/externals")
 
-if(PREPARE_EXTERNALS)
+if(PREPARE_EXTERNALS_WO_QT)
     # Set the variables for prepare externals script.
     set(ENV{BUILD_DIR} ${BUILD_DIR})
     set(COMMON_INSTALL_DIR ${BUILD_DIR}/install)
     set(ENV{COMMON_INSTALL_DIR} ${COMMON_INSTALL_DIR})
     set(COMMON_BUILD_TYPE Release)
     set(ENV{COMMON_BUILD_TYPE} ${COMMON_BUILD_TYPE})
+    set(CC_TOOLS_QT_SKIP 1)
+    set(ENV{CC_TOOLS_QT_SKIP} ${CC_TOOLS_QT_SKIP})
 
     # Set environment variables
     set(ENV{CC} ${CMAKE_C_COMPILER})
